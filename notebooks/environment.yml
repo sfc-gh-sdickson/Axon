@@ -1,6 +1,7 @@
 # Snowflake Notebook Environment Configuration
 # This file specifies the Python packages required to run the Axon ML Models notebook
 # Upload this file when creating/configuring your notebook in Snowflake
+# Note: Snowflake automatically uses the latest compatible versions
 
 name: axon_ml_models
 channels:
@@ -8,11 +9,11 @@ channels:
   - nodefaults
 dependencies:
   - python=3.10
-  - snowflake-snowpark-python>=1.11.0
-  - snowflake-ml-python>=1.5.0
-  - scikit-learn>=1.3.0
-  - xgboost>=2.0.0
-  - matplotlib>=3.7.0
-  - pandas>=2.0.0
-  - numpy>=1.24.0
+  - snowflake-snowpark-python
+  - snowflake-ml-python
+  - scikit-learn
+  - xgboost
+  - matplotlib
+  - pandas
+  - numpy
 
