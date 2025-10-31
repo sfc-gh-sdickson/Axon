@@ -5,8 +5,7 @@
 name: axon_ml_models
 channels:
   - snowflake
-  - conda-forge
-  - defaults
+  - nodefaults
 dependencies:
   - python=3.10
   - snowflake-snowpark-python>=1.11.0
