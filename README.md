@@ -89,22 +89,41 @@ The solution includes:
 - `sql/views/04_create_views.sql`: Analytical views
 - `sql/views/05_create_semantic_views.sql`: Semantic views for AI agents (verified syntax)
 - `sql/search/06_create_cortex_search.sql`: Unstructured data tables and Cortex Search services
-- `sql/ml/07_create_model_wrapper_functions.sql`: ML model wrapper procedures
+- `sql/ml/07_create_model_wrapper_functions.sql`: ML model wrapper procedures (optional)
+- `sql/agent/08_create_intelligence_agent.sql`: **Create Snowflake Intelligence Agent (full version with ML)**
+- `sql/agent/08_create_intelligence_agent_no_ml.sql`: **Create Snowflake Intelligence Agent (simplified, no ML)**
 
 ### ML Models (Optional)
 - `notebooks/axon_ml_models.ipynb`: Snowflake Notebook for training ML models
 
 ## Setup Instructions
 
-1. Execute SQL files in order (01 through 06)
-   - 01: Database and schema setup
-   - 02: Create tables
-   - 03: Generate synthetic data (10-20 min)
-   - 04: Create analytical views
-   - 05: Create semantic views
-   - 06: Create Cortex Search services (5-10 min)
-2. Follow docs/AGENT_SETUP.md for agent configuration
-3. Test with questions from docs/questions.md
+### Quick Start (Simplified Agent - No ML)
+```sql
+-- Execute in order:
+-- 1. Run sql/setup/01_database_and_schema.sql
+-- 2. Run sql/setup/02_create_tables.sql
+-- 3. Run sql/data/03_generate_synthetic_data.sql (10-20 min)
+-- 4. Run sql/views/04_create_views.sql
+-- 5. Run sql/views/05_create_semantic_views.sql
+-- 6. Run sql/search/06_create_cortex_search.sql (5-10 min)
+-- 7. Run sql/agent/08_create_intelligence_agent_no_ml.sql
+-- 8. Access agent in Snowsight: AI & ML > Agents > AXON_INTELLIGENCE_AGENT
+```
+
+### Complete Setup (Full Agent with ML)
+```sql
+-- Execute quick start steps 1-6, then:
+-- 7. Upload and run notebooks/axon_ml_models.ipynb in Snowflake
+-- 8. Run sql/ml/07_create_model_wrapper_functions.sql
+-- 9. Run sql/agent/08_create_intelligence_agent.sql
+-- 10. Access agent in Snowsight: AI & ML > Agents > AXON_INTELLIGENCE_AGENT
+```
+
+### Detailed Instructions
+- See **docs/AGENT_SETUP.md** for step-by-step configuration guide
+- See **sql/agent/README.md** for agent creation options
+- Test with questions from **docs/questions.md**
 
 ## Data Model Highlights
 
