@@ -431,8 +431,207 @@ SELECT PARSE_JSON(
 
 **Version:** 1.0  
 **Created:** October 2025  
-**Based on:** Microchip Intelligence Agent Template  
 **Verified:** All syntax verified against Snowflake documentation
 
 **Setup Time Estimate**: 30-45 minutes (including data generation)
+
+---
+
+## OPTIONAL: Add ML Models (Evidence Forecasting, Churn, Deployment Success)
+
+This section is optional but adds powerful ML prediction capabilities to your agent.
+
+### Prerequisites for ML Models
+
+- Core setup (Steps 1-3) completed
+- Files 01-06 executed successfully
+- Agent configured with semantic views and Cortex Search
+
+### ML Setup Overview
+
+1. Upload and run Snowflake Notebook to train models
+2. Execute SQL wrapper functions file
+3. Add 3 ML procedures to agent as tools
+
+**Time:** 20-30 minutes
+
+---
+
+### ML Step 1: Upload Notebook to Snowflake (5 min)
+
+1. In Snowsight, click **Projects** → **Notebooks**
+2. Click **+ Notebook** → **Import .ipynb file**
+3. Upload: `notebooks/axon_ml_models.ipynb`
+4. Name it: `Axon ML Models`
+5. Configure:
+   - **Database:** AXON_INTELLIGENCE
+   - **Schema:** ANALYTICS
+   - **Warehouse:** AXON_WH
+6. Click **Create**
+
+### ML Step 2: Add Required Packages
+
+1. In the notebook, click **Packages** dropdown (upper right)
+2. Search and add each package:
+   - `snowflake-ml-python`
+   - `scikit-learn`
+   - `xgboost`
+   - `matplotlib`
+3. Click **Start** to activate the notebook
+
+### ML Step 3: Run Notebook to Train Models (10 min)
+
+1. Click **Run All** (or run each cell sequentially)
+2. Wait for training to complete (2-3 minutes per model)
+3. Verify output shows:
+   - "✅ Evidence upload volume forecasting model trained"
+   - "✅ Agency churn classification model trained"
+   - "✅ Deployment success prediction model trained"
+   - "✅ Evidence volume model registered to Model Registry as EVIDENCE_VOLUME_PREDICTOR"
+   - "✅ Churn model registered to Model Registry as AGENCY_CHURN_PREDICTOR"
+   - "✅ Deployment model registered to Model Registry as DEPLOYMENT_SUCCESS_PREDICTOR"
+
+**Models created:**
+- EVIDENCE_VOLUME_PREDICTOR (Linear Regression for evidence upload forecasting)
+- AGENCY_CHURN_PREDICTOR (Random Forest for churn classification)
+- DEPLOYMENT_SUCCESS_PREDICTOR (Logistic Regression for deployment success prediction)
+
+### ML Step 4: Create Wrapper Procedures (2 min)
+
+Execute the SQL wrapper functions:
+
+```sql
+@sql/ml/07_create_model_wrapper_functions.sql
+```
+
+This creates 3 stored procedures that wrap the Model Registry models so the agent can call them.
+
+**Procedures created:**
+- PREDICT_EVIDENCE_UPLOAD_VOLUME(months_ahead)
+- PREDICT_AGENCY_CHURN(agency_type_filter)
+- PREDICT_DEPLOYMENT_SUCCESS(product_family_filter)
+
+### ML Step 5: Add ML Procedures to Agent (10 min)
+
+#### Navigate to Agent Tools
+
+1. In your agent editor (AXON_INTELLIGENCE_AGENT)
+2. Click **Tools** (left sidebar)
+
+#### Add Procedure 1: PREDICT_EVIDENCE_UPLOAD_VOLUME
+
+1. Click **+ Add** button (top right)
+2. Click **Procedure** tile (NOT Function)
+3. In dropdown, select: `AXON_INTELLIGENCE.ANALYTICS.PREDICT_EVIDENCE_UPLOAD_VOLUME`
+4. Paste in Description:
+   ```
+   Evidence Upload Volume Forecasting Procedure
+   
+   Predicts future evidence upload volume using the EVIDENCE_VOLUME_PREDICTOR model from Model Registry.
+   The model uses Linear Regression trained on historical evidence upload patterns.
+   
+   Use when users ask to:
+   - Forecast evidence uploads
+   - Predict future storage needs
+   - Project evidence volume
+   - Estimate upcoming evidence capacity
+   
+   Parameter:
+   - months_ahead: Number of months to forecast (1-12 recommended)
+   
+   Returns: JSON with predicted upload volume
+   
+   Example: "Forecast evidence upload volume for the next 6 months"
+   ```
+5. Click **Add**
+
+#### Add Procedure 2: PREDICT_AGENCY_CHURN
+
+1. Click **+ Add** → **Procedure**
+2. Select: `AXON_INTELLIGENCE.ANALYTICS.PREDICT_AGENCY_CHURN`
+3. Description:
+   ```
+   Agency Churn Prediction Procedure
+   
+   Predicts which agencies are at risk of churning using the AGENCY_CHURN_PREDICTOR model
+   from Model Registry. Uses Random Forest classifier trained on behavior patterns.
+   
+   Use when users ask to:
+   - Identify at-risk agencies
+   - Predict agency churn
+   - Find agencies likely to cancel
+   - Calculate churn risk
+   
+   Parameter:
+   - agency_type_filter: Filter by type (MUNICIPAL_POLICE, COUNTY_SHERIFF, STATE_POLICE)
+     or empty string for all agencies
+   
+   Returns: JSON with churn count and churn rate percentage
+   
+   Example: "Which municipal police agencies are predicted to churn?"
+   ```
+4. Click **Add**
+
+#### Add Procedure 3: PREDICT_DEPLOYMENT_SUCCESS
+
+1. Click **+ Add** → **Procedure**
+2. Select: `AXON_INTELLIGENCE.ANALYTICS.PREDICT_DEPLOYMENT_SUCCESS`
+3. Description:
+   ```
+   Device Deployment Success Prediction Procedure
+   
+   Predicts which device deployments are likely to be successful using the
+   DEPLOYMENT_SUCCESS_PREDICTOR model from Model Registry. Uses Logistic Regression.
+   
+   Use when users ask to:
+   - Predict deployment success probability
+   - Identify high-probability deployments
+   - Find deployments likely to succeed
+   - Prioritize deployment resources
+   
+   Parameter:
+   - product_family_filter: Filter by family (TASER, BODY_CAMERA, IN_CAR, etc.)
+     or empty string for all families
+   
+   Returns: JSON with success count and success rate percentage
+   
+   Example: "Which body camera deployments will likely be successful?"
+   ```
+4. Click **Add**
+
+#### Verify ML Procedures Added
+
+Your agent's **Tools** section should now show:
+- **Cortex Analyst (3):** Semantic views
+- **Cortex Search (3):** Search services
+- **Procedures (3):** ML prediction procedures
+
+**Total: 9 tools**
+
+### ML Step 6: Test ML Capabilities
+
+Ask your agent:
+
+```
+"Forecast evidence upload volume for the next 6 months"
+"Which agencies are predicted to churn?"
+"Show me device deployments with high success probability for body cameras"
+```
+
+The agent will call the appropriate ML procedures and return predictions!
+
+---
+
+## Complete Setup Summary
+
+### Core Setup (Required - 45 minutes):
+1. Execute SQL files 01-06
+2. Configure agent with semantic views and Cortex Search
+
+### ML Setup (Optional - 30 minutes):
+1. Upload and run ML notebook
+2. Execute wrapper functions SQL
+3. Add 3 procedures to agent
+
+**Total with ML: ~75 minutes**
 

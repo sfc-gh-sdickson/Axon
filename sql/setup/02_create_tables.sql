@@ -2,7 +2,6 @@
 -- Axon Intelligence Agent - Table Definitions
 -- ============================================================================
 -- Purpose: Create all necessary tables for the Axon business model
--- Based on verified Microchip template structure
 -- All columns verified against Axon business requirements
 -- ============================================================================
 

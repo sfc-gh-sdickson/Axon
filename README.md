@@ -327,7 +327,6 @@ This solution is provided as a template for building Snowflake Intelligence agen
 ---
 
 **Created**: October 2025  
-**Template Based On**: Microchip Intelligence Demo  
 **Snowflake Documentation**: Syntax verified against official documentation  
 **Target Use Case**: Axon law enforcement technology business intelligence
 
