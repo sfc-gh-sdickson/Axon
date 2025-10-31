@@ -99,7 +99,7 @@ tools:
       name: 'IncidentReportsSearch'
       description: 'Searches 10,000+ quality investigation reports covering failures, root causes, and corrective actions'
   - tool_spec:
-      type: 'function'
+      type: 'generic'
       name: 'PredictEvidenceVolume'
       description: 'Predicts future evidence upload volume for capacity planning'
       input_schema:
@@ -110,7 +110,7 @@ tools:
             description: 'Number of months to forecast (1-12)'
         required: ['months_ahead']
   - tool_spec:
-      type: 'function'
+      type: 'generic'
       name: 'PredictAgencyChurn'
       description: 'Predicts agency churn risk for retention assessment'
       input_schema:
@@ -121,7 +121,7 @@ tools:
             description: 'Agency ID to assess'
         required: ['agency_id']
   - tool_spec:
-      type: 'function'
+      type: 'generic'
       name: 'PredictDeploymentSuccess'
       description: 'Predicts deployment success probability for planning'
       input_schema:
@@ -152,11 +152,26 @@ tool_resources:
     name: 'AXON_INTELLIGENCE.RAW.INCIDENT_REPORTS_SEARCH'
     max_results: '10'
   PredictEvidenceVolume:
-    function: 'AXON_INTELLIGENCE.ANALYTICS.PREDICT_EVIDENCE_UPLOAD_VOLUME'
+    type: 'procedure'
+    identifier: 'AXON_INTELLIGENCE.ANALYTICS.PREDICT_EVIDENCE_UPLOAD_VOLUME'
+    execution_environment:
+      type: 'warehouse'
+      warehouse: 'AXON_WH'
+      query_timeout: 60
   PredictAgencyChurn:
-    function: 'AXON_INTELLIGENCE.ANALYTICS.PREDICT_AGENCY_CHURN'
+    type: 'procedure'
+    identifier: 'AXON_INTELLIGENCE.ANALYTICS.PREDICT_AGENCY_CHURN'
+    execution_environment:
+      type: 'warehouse'
+      warehouse: 'AXON_WH'
+      query_timeout: 60
   PredictDeploymentSuccess:
-    function: 'AXON_INTELLIGENCE.ANALYTICS.PREDICT_DEPLOYMENT_SUCCESS'
+    type: 'procedure'
+    identifier: 'AXON_INTELLIGENCE.ANALYTICS.PREDICT_DEPLOYMENT_SUCCESS'
+    execution_environment:
+      type: 'warehouse'
+      warehouse: 'AXON_WH'
+      query_timeout: 60
   $$;
 
 -- ============================================================================
