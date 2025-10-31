@@ -138,19 +138,31 @@ tools:
 tool_resources:
   DeviceDeploymentAnalyst:
     semantic_view: 'AXON_INTELLIGENCE.ANALYTICS.SV_DEVICE_DEPLOYMENT_INTELLIGENCE'
+    execution_environment:
+      type: 'warehouse'
+      warehouse: 'AXON_WH'
+      query_timeout: 60
   SalesRevenueAnalyst:
     semantic_view: 'AXON_INTELLIGENCE.ANALYTICS.SV_SALES_REVENUE_INTELLIGENCE'
+    execution_environment:
+      type: 'warehouse'
+      warehouse: 'AXON_WH'
+      query_timeout: 60
   SupportQualityAnalyst:
     semantic_view: 'AXON_INTELLIGENCE.ANALYTICS.SV_SUPPORT_QUALITY_INTELLIGENCE'
+    execution_environment:
+      type: 'warehouse'
+      warehouse: 'AXON_WH'
+      query_timeout: 60
   SupportTranscriptsSearch:
-    name: 'AXON_INTELLIGENCE.RAW.SUPPORT_TRANSCRIPTS_SEARCH'
-    max_results: '10'
+    search_service: 'AXON_INTELLIGENCE.RAW.SUPPORT_TRANSCRIPTS_SEARCH'
+    max_results: 10
   PolicyDocumentsSearch:
-    name: 'AXON_INTELLIGENCE.RAW.POLICY_DOCUMENTS_SEARCH'
-    max_results: '5'
+    search_service: 'AXON_INTELLIGENCE.RAW.POLICY_DOCUMENTS_SEARCH'
+    max_results: 5
   IncidentReportsSearch:
-    name: 'AXON_INTELLIGENCE.RAW.INCIDENT_REPORTS_SEARCH'
-    max_results: '10'
+    search_service: 'AXON_INTELLIGENCE.RAW.INCIDENT_REPORTS_SEARCH'
+    max_results: 10
   PredictEvidenceVolume:
     type: 'procedure'
     identifier: 'AXON_INTELLIGENCE.ANALYTICS.PREDICT_EVIDENCE_UPLOAD_VOLUME'
