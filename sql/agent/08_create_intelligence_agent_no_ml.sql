@@ -43,70 +43,72 @@ GRANT USAGE ON CORTEX SEARCH SERVICE AXON_INTELLIGENCE.RAW.INCIDENT_REPORTS_SEAR
 -- Step 2: Create Snowflake Intelligence Agent
 -- ============================================================================
 
-CREATE OR REPLACE SNOWFLAKE.CORE.AGENT AXON_INTELLIGENCE_AGENT
-  WAREHOUSE = AXON_WH
-  COMMENT = 'Axon Intelligence Agent for law enforcement technology business intelligence - analyzes device deployments, evidence management, sales, support, and quality data using Cortex Analyst and Cortex Search'
-AS
-$$
-{
-  "name": "Axon Intelligence Agent",
-  "description": "This agent orchestrates between Axon law enforcement technology business data for analyzing structured metrics using Cortex Analyst (semantic views) and unstructured technical content using Cortex Search services (support transcripts, policy documents, incident reports).",
-  
-  "instructions": "You are a specialized analytics assistant for Axon, a leading law enforcement technology provider. Your primary objectives are:\n\nFor structured data queries (metrics, KPIs, deployments, revenue figures):\n- Use the Cortex Analyst semantic views for device deployment, sales revenue, and support quality analysis\n- Provide direct, numerical answers with minimal explanation\n- Format responses clearly with relevant units and time periods\n- Only include essential context needed to understand the metric\n\nFor unstructured technical content (support transcripts, policy documents, incident reports):\n- Use Cortex Search services to find similar technical issues, policy guidance, and quality investigations\n- Extract relevant troubleshooting procedures, root causes, and solutions\n- Summarize technical findings in brief, focused responses\n- Maintain context from original documentation\n\nOperating guidelines:\n- Always identify whether you're using Cortex Analyst or Cortex Search for each response\n- Keep responses under 3-4 sentences when possible for metrics\n- Present numerical data in structured format\n- Don't speculate beyond available data\n- Highlight quality issues and deployment success metrics prominently\n- For technical support queries, reference specific product families and issue types\n- Include relevant policy references when available",
-  
-  "sample_questions": [
-    "Which products have the highest deployment rates in municipal police agencies?",
-    "What is our competitive win rate against WatchGuard?",
-    "Search support transcripts for body camera syncing problems",
-    "What are the top support ticket categories by volume?",
-    "Show me evidence upload trends by product family",
-    "Which agencies have the highest customer satisfaction scores?",
-    "Find policy documentation about TASER device use",
-    "What are the quality issues for Axon Body 3 cameras?",
-    "Compare distributor performance in the Western region",
-    "Show total revenue by product family"
-  ],
-  
-  "tools": [
-    {
-      "type": "CORTEX_ANALYST",
-      "name": "device_deployment_intelligence",
-      "description": "This semantic view contains comprehensive data about agencies, officers, products, device deployments, evidence uploads, and certifications. Use this for queries about:\n- Device deployment analysis by agency and product family\n- Evidence upload patterns and storage utilization\n- Officer certification impact on device usage\n- Competitive replacement wins\n- Product performance in deployments\n- Agency device adoption rates",
-      "semantic_model": "AXON_INTELLIGENCE.ANALYTICS.SV_DEVICE_DEPLOYMENT_INTELLIGENCE"
-    },
-    {
-      "type": "CORTEX_ANALYST",
-      "name": "sales_revenue_intelligence",
-      "description": "This semantic view contains order data, revenue metrics, distributor performance, and support contracts. Use this for queries about:\n- Revenue trends by product family, region, or agency type\n- Distributor performance and channel effectiveness\n- Order patterns and purchasing behavior\n- Support contract analysis and renewals\n- Direct sales versus distributor sales\n- Grant-funded purchase analysis",
-      "semantic_model": "AXON_INTELLIGENCE.ANALYTICS.SV_SALES_REVENUE_INTELLIGENCE"
-    },
-    {
-      "type": "CORTEX_ANALYST",
-      "name": "support_quality_intelligence",
-      "description": "This semantic view contains support ticket data, quality issues, and customer satisfaction metrics. Use this for queries about:\n- Support ticket volumes and resolution times\n- Customer satisfaction scores by agency and product\n- Technical issue patterns by product family\n- Support engineer performance metrics\n- Quality issue rates and root causes\n- Escalation patterns and critical issues",
-      "semantic_model": "AXON_INTELLIGENCE.ANALYTICS.SV_SUPPORT_QUALITY_INTELLIGENCE"
-    },
-    {
-      "type": "CORTEX_SEARCH",
-      "name": "support_transcripts_search",
-      "description": "Semantic search over 20,000+ technical support interaction transcripts covering device troubleshooting, configuration help, training questions, and technical guidance. Use this for:\n- Finding similar technical issues and their resolutions\n- Troubleshooting procedures for specific products\n- Configuration guidance and best practices\n- Training and certification questions\n- Common problems and solutions by product family",
-      "cortex_search_service": "AXON_INTELLIGENCE.RAW.SUPPORT_TRANSCRIPTS_SEARCH"
-    },
-    {
-      "type": "CORTEX_SEARCH",
-      "name": "policy_documents_search",
-      "description": "Semantic search over operational policy documents including body camera operations manual, TASER use policy, and Evidence.com digital evidence management guidelines. Use this for:\n- Policy procedures and guidelines\n- Compliance and regulatory information\n- Operational best practices\n- Training requirements\n- Equipment usage policies",
-      "cortex_search_service": "AXON_INTELLIGENCE.RAW.POLICY_DOCUMENTS_SEARCH"
-    },
-    {
-      "type": "CORTEX_SEARCH",
-      "name": "incident_reports_search",
-      "description": "Semantic search over 10,000+ quality investigation and incident reports covering field failures, root cause analysis, and corrective actions. Use this for:\n- Quality issue investigations and root causes\n- Field failure patterns\n- Corrective and preventive actions\n- Manufacturing defect analysis\n- Customer application issues",
-      "cortex_search_service": "AXON_INTELLIGENCE.RAW.INCIDENT_REPORTS_SEARCH"
-    }
-  ]
-}
-$$;
+CREATE OR REPLACE AGENT AXON_INTELLIGENCE_AGENT
+  COMMENT = 'Axon Intelligence Agent for law enforcement technology business intelligence'
+  PROFILE = '{"display_name": "Axon Intelligence Agent", "avatar": "shield-icon.png", "color": "blue"}'
+  FROM SPECIFICATION
+  $$
+models:
+  orchestration: claude-4-sonnet
+
+orchestration:
+  budget:
+    seconds: 60
+    tokens: 32000
+
+instructions:
+  response: 'You are a specialized analytics assistant for Axon law enforcement technology. For structured data queries use Cortex Analyst semantic views. For unstructured content use Cortex Search services. Keep responses concise and data-driven.'
+  orchestration: 'For metrics and KPIs use Cortex Analyst tools. For support transcripts, policies, and incident reports use Cortex Search tools.'
+  system: 'You help analyze law enforcement technology data including device deployments, evidence management, sales, support, and quality using structured and unstructured data sources.'
+  sample_questions:
+    - question: 'Which products have the highest deployment rates in municipal police agencies?'
+      answer: 'I will analyze deployment data using the device deployment intelligence semantic view.'
+    - question: 'Search support transcripts for body camera syncing problems'
+      answer: 'I will search technical support transcripts using Cortex Search.'
+
+tools:
+  - tool_spec:
+      type: 'cortex_analyst_text_to_sql'
+      name: 'DeviceDeploymentAnalyst'
+      description: 'Analyzes device deployments, evidence uploads, officer certifications, and competitive wins across agencies and products'
+  - tool_spec:
+      type: 'cortex_analyst_text_to_sql'
+      name: 'SalesRevenueAnalyst'
+      description: 'Analyzes orders, revenue, distributor performance, and support contracts'
+  - tool_spec:
+      type: 'cortex_analyst_text_to_sql'
+      name: 'SupportQualityAnalyst'
+      description: 'Analyzes support tickets, quality issues, customer satisfaction, and engineer performance'
+  - tool_spec:
+      type: 'cortex_search'
+      name: 'SupportTranscriptsSearch'
+      description: 'Searches 20,000+ technical support transcripts for troubleshooting, configuration help, and training questions'
+  - tool_spec:
+      type: 'cortex_search'
+      name: 'PolicyDocumentsSearch'
+      description: 'Searches operational policies including body camera operations, TASER use, and evidence management guidelines'
+  - tool_spec:
+      type: 'cortex_search'
+      name: 'IncidentReportsSearch'
+      description: 'Searches 10,000+ quality investigation reports covering failures, root causes, and corrective actions'
+
+tool_resources:
+  DeviceDeploymentAnalyst:
+    semantic_view: 'AXON_INTELLIGENCE.ANALYTICS.SV_DEVICE_DEPLOYMENT_INTELLIGENCE'
+  SalesRevenueAnalyst:
+    semantic_view: 'AXON_INTELLIGENCE.ANALYTICS.SV_SALES_REVENUE_INTELLIGENCE'
+  SupportQualityAnalyst:
+    semantic_view: 'AXON_INTELLIGENCE.ANALYTICS.SV_SUPPORT_QUALITY_INTELLIGENCE'
+  SupportTranscriptsSearch:
+    name: 'AXON_INTELLIGENCE.RAW.SUPPORT_TRANSCRIPTS_SEARCH'
+    max_results: '10'
+  PolicyDocumentsSearch:
+    name: 'AXON_INTELLIGENCE.RAW.POLICY_DOCUMENTS_SEARCH'
+    max_results: '5'
+  IncidentReportsSearch:
+    name: 'AXON_INTELLIGENCE.RAW.INCIDENT_REPORTS_SEARCH'
+    max_results: '10'
+  $$;
 
 -- ============================================================================
 -- Step 3: Verify Agent Creation
@@ -117,6 +119,9 @@ SHOW AGENTS LIKE 'AXON_INTELLIGENCE_AGENT';
 
 -- Describe agent configuration
 DESCRIBE AGENT AXON_INTELLIGENCE_AGENT;
+
+-- Grant usage
+GRANT USAGE ON AGENT AXON_INTELLIGENCE_AGENT TO ROLE SYSADMIN;
 
 -- ============================================================================
 -- Step 4: Test Agent (Examples)
@@ -145,14 +150,11 @@ DESCRIBE AGENT AXON_INTELLIGENCE_AGENT;
 */
 
 -- ============================================================================
--- Step 5: Grant Agent Usage to Other Roles
+-- Step 5: Grant Agent Usage to Other Roles (Already done in Step 3)
 -- ============================================================================
 
--- Grant usage of the agent to specific roles
-GRANT USAGE ON SNOWFLAKE.CORE.AGENT AXON_INTELLIGENCE_AGENT TO ROLE SYSADMIN;
-
 -- To grant to additional roles:
--- GRANT USAGE ON SNOWFLAKE.CORE.AGENT AXON_INTELLIGENCE_AGENT TO ROLE <role_name>;
+-- GRANT USAGE ON AGENT AXON_INTELLIGENCE_AGENT TO ROLE <role_name>;
 
 -- ============================================================================
 -- Success Message
