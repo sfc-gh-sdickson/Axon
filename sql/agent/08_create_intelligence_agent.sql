@@ -169,20 +169,20 @@ tool_resources:
       warehouse: 'AXON_WH'
       query_timeout: 60
   SupportTranscriptsSearch:
-    search_service: 'AXON_INTELLIGENCE.RAW.SUPPORT_TRANSCRIPTS_SEARCH'
+    name: 'AXON_INTELLIGENCE.RAW.SUPPORT_TRANSCRIPTS_SEARCH'
     max_results: 10
-    title_column: 'ticket_id'
-    id_column: 'transcript_id'
+    title_column: 'TICKET_ID'
+    id_column: 'TRANSCRIPT_ID'
   PolicyDocumentsSearch:
-    search_service: 'AXON_INTELLIGENCE.RAW.POLICY_DOCUMENTS_SEARCH'
+    name: 'AXON_INTELLIGENCE.RAW.POLICY_DOCUMENTS_SEARCH'
     max_results: 5
-    title_column: 'title'
-    id_column: 'policy_id'
+    title_column: 'TITLE'
+    id_column: 'POLICY_ID'
   IncidentReportsSearch:
-    search_service: 'AXON_INTELLIGENCE.RAW.INCIDENT_REPORTS_SEARCH'
+    name: 'AXON_INTELLIGENCE.RAW.INCIDENT_REPORTS_SEARCH'
     max_results: 10
-    title_column: 'incident_type'
-    id_column: 'incident_report_id'
+    title_column: 'INCIDENT_TYPE'
+    id_column: 'INCIDENT_REPORT_ID'
   PredictEvidenceVolume:
     type: 'procedure'
     identifier: 'AXON_INTELLIGENCE.ANALYTICS.PREDICT_EVIDENCE_UPLOAD_VOLUME'
