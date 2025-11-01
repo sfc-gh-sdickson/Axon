@@ -171,12 +171,18 @@ tool_resources:
   SupportTranscriptsSearch:
     search_service: 'AXON_INTELLIGENCE.RAW.SUPPORT_TRANSCRIPTS_SEARCH'
     max_results: 10
+    id_column: 'transcript_id'
+    title_column: 'ticket_id'
   PolicyDocumentsSearch:
     search_service: 'AXON_INTELLIGENCE.RAW.POLICY_DOCUMENTS_SEARCH'
     max_results: 5
+    id_column: 'policy_id'
+    title_column: 'title'
   IncidentReportsSearch:
     search_service: 'AXON_INTELLIGENCE.RAW.INCIDENT_REPORTS_SEARCH'
     max_results: 10
+    id_column: 'incident_report_id'
+    title_column: 'incident_type'
   PredictEvidenceVolume:
     type: 'procedure'
     identifier: 'AXON_INTELLIGENCE.ANALYTICS.PREDICT_EVIDENCE_UPLOAD_VOLUME'
