@@ -61,10 +61,16 @@ instructions:
   orchestration: 'For metrics and KPIs use Cortex Analyst tools. For support transcripts, policies, and incident reports use Cortex Search tools.'
   system: 'You help analyze law enforcement technology data including device deployments, evidence management, sales, support, and quality using structured and unstructured data sources.'
   sample_questions:
-    - question: 'Which products have the highest deployment rates in municipal police agencies?'
-      answer: 'I will analyze deployment data using the device deployment intelligence semantic view.'
-    - question: 'Search support transcripts for body camera syncing problems'
-      answer: 'I will search technical support transcripts using Cortex Search.'
+    - question: 'Analyze device deployments by status. Show me total deployments, breakdown by product family, deployment success rate, average evidence uploads per device, and which product families have highest utilization rates.'
+      answer: 'I will use the Device Deployment Intelligence semantic view to analyze deployment patterns across product families and calculate utilization metrics.'
+    - question: 'Analyze competitive replacement deployments. Show me total competitive wins by competitor, which product families are winning against which competitors, and our win rate by product type.'
+      answer: 'I will query the Device Deployment Intelligence data to analyze competitive replacements and calculate win rates by competitor and product family.'
+    - question: 'Analyze evidence upload patterns and storage utilization. Show me total evidence uploads by type, storage consumption trends, and agencies approaching storage limits.'
+      answer: 'I will use the Device Deployment Intelligence view to analyze evidence upload patterns, storage trends, and identify agencies with high storage utilization.'
+    - question: 'Analyze correlation between officer certifications and device utilization effectiveness. Show me evidence upload rates for certified versus non-certified officers and device sync compliance.'
+      answer: 'I will analyze certification data with device deployment and evidence upload patterns to show the impact of officer training on device effectiveness.'
+    - question: 'Analyze quality issues and their impact on agency retention. Show me total quality issues by severity, breakdown by product family, and correlation between quality issues and support satisfaction scores.'
+      answer: 'I will use the Support Quality Intelligence view to analyze quality issue patterns and correlate them with customer satisfaction metrics.'
 
 tools:
   - tool_spec:
